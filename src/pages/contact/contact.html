@@ -1,0 +1,44 @@
+<ion-header class="header">
+	<img class="title-image" src="assets/trokt_banner.png"/>
+</ion-header>
+
+<ion-content padding class="has-header">
+  <ion-fab class="back-button-container" top left edge>
+    <button color="green" (click)="goBack()" ion-fab mini><ion-icon name="arrow-back"></ion-icon></button>
+  </ion-fab>
+  <div class="contact-form-container">
+    <form [formGroup]="contactForm" (ngSubmit)="submit()">
+      <ion-list>
+        <div class="contact-form-info-text description-text" padding>
+          <h5>I would like to learn more about using Trokt Tracker.</h5>
+        </div>
+
+        <ion-item>
+          <ion-label floating>What Group do you belong to?</ion-label>
+          <ion-input type="text" name="username" formControlName="group_name"></ion-input>
+        </ion-item>
+
+				<ion-item *ngIf="!contactForm.controls.group_name.valid && contactForm.controls.group_name.touched" no-lines>
+					<span class="invalid">Required</span>
+				</ion-item>
+
+        <ion-item>
+          <ion-label floating>Your Email</ion-label>
+          <ion-input type="email" name="useremail" formControlName="user_email"></ion-input>
+        </ion-item>
+
+				<ion-item *ngIf="contactForm.controls.user_email.errors?.required && contactForm.controls.user_email.touched" no-lines>
+					<span class="invalid">Required</span>
+				</ion-item>
+
+				<ion-item *ngIf="contactForm.controls.user_email.errors?.pattern && contactForm.controls.user_email.touched" no-lines>
+					<span class="invalid">Must be a valid email</span>
+				</ion-item>
+
+        <div padding class="center-content">
+          <button color="green" ion-button outline type="submit" [disabled]="!contactForm.valid">Contact</button>
+        </div>
+      </ion-list>
+    </form>
+  </div>
+</ion-content>

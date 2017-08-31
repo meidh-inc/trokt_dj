@@ -1,0 +1,32 @@
+<ion-header class="header">
+	<img class="title-image" src="assets/trokt_banner.png"/>
+</ion-header>
+
+<ion-content padding class="has-header">
+  <div class="login-info-container">
+    <h5 class="login-info-text description-text">
+      Trokt Tracker is for approved users to submit issues for resolution. 
+      If you believe you should have access to Trokt Tracker, please 
+      <span class="link-text" (click)="navigateToContactPage()">contact Trokt for help.</span>
+    </h5>
+  </div>
+  <form [formGroup]="loginForm" class="login-form" (ngSubmit)="login()">
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="email" name="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password" name="password" formControlName="password"></ion-input>
+    </ion-item>
+
+    <div padding class="center-content">
+      <button color="green" type="submit" [disabled]="!loginForm.valid" ion-button outline>Sign In</button>
+    </div>
+  </form>
+  <h6 class="login-support-text description-text">
+    For more information on the various Trokt platforms, please visit 
+    <a class="link-text" href="http://www.trokt.org/">www.trokt.org</a>
+  </h6>
+</ion-content>

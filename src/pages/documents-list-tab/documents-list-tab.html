@@ -1,0 +1,25 @@
+<ion-header class="header">
+	<img class="title-image" src="assets/trokt_banner.png"/>
+</ion-header>
+
+<ion-content padding>
+	<ion-searchbar (ionBlur)="searchInputBlur()" (search)="searchInputEnterTapped($event)" placeholder="Search Documents" [(ngModel)]="searchText"></ion-searchbar>
+	<div class="documents-list-empty description-text" *ngIf="documents.length === 0"> 
+		No Documents to View
+	</div>
+
+	<ion-card *ngFor="let document of documents">
+		<ion-card-content>
+			{{ document.doc_name }}
+		</ion-card-content>
+
+		<ion-row>
+			<ion-col>
+			<button (click)="expandDocument(document)" ion-button icon-left clear small>
+				<ion-icon name="link"></ion-icon>
+				<div>View Document</div>
+			</button>
+			</ion-col>
+		</ion-row>
+	</ion-card>
+</ion-content>

@@ -1,0 +1,59 @@
+<ion-header class="header">
+	<img class="title-image" src="assets/trokt_banner.png"/>
+</ion-header>
+
+<ion-content padding class="has-header">
+    <form [formGroup]="issueForm" (ngSubmit)="submitIssue()">
+      <ion-list>
+				<ion-item class="input-item" text-wrap>
+					<ion-label><span class="larger-input-label">Group</span></ion-label>
+					<ion-select formControlName="group_id" (ionChange)="groupChanged()">
+						<ion-option *ngFor="let group of groups" value="{{group.group_id}}">{{group.group_name}}</ion-option>
+					</ion-select>
+				</ion-item>
+
+				<ion-item *ngIf="!issueForm.controls.group_id.valid && issueForm.controls.group_id.touched" no-lines>
+					<span class="invalid">Required</span>
+				</ion-item>
+
+				<ion-item class="input-item" text-wrap>
+					<ion-label><span class="larger-input-label">Document</span></ion-label>
+					<ion-select formControlName="document_id" (ionChange)="documentChanged()">
+						<ion-option *ngFor="let document of documents" value="{{document.doc_id}}">{{document.doc_name}}</ion-option>
+					</ion-select>
+				</ion-item>
+
+				<ion-item *ngIf="!issueForm.controls.document_id.valid && issueForm.controls.document_id.touched" no-lines>
+					<span class="invalid">Required</span>
+				</ion-item>
+
+				<ion-item class="input-item" text-wrap>
+					<ion-label><span class="larger-input-label">Section</span></ion-label>
+					<ion-select formControlName="block_id" (ionChange)="blockChanged()">
+						<ion-option *ngFor="let block of blocks" value="{{block.block_id}}">{{block.block_title}}</ion-option>
+					</ion-select>
+				</ion-item>
+
+				<ion-item *ngIf="!issueForm.controls.block_id.valid && issueForm.controls.block_id.touched" no-lines>
+					<span class="invalid">Required</span>
+				</ion-item>
+
+        <div class="center-content section-details-btn" *ngIf="blockHasText">
+          <button type="button" color="green" (click)="viewBlockDetails()" ion-button outline small>Section Details</button>
+        </div>
+
+        <ion-item class="input-item" text-wrap>
+          <ion-label floating><span class="larger-input-label">Issue Details</span></ion-label>
+          <ion-textarea formControlName="details"></ion-textarea>
+        </ion-item>
+
+				<ion-item *ngIf="!issueForm.controls.details.valid && issueForm.controls.details.touched" no-lines>
+					<span class="invalid">Required</span>
+				</ion-item>
+
+        <div padding class="center-content">
+          <button type="submit" color="green" ion-button outline [disabled]="!issueForm.valid">Submit</button>
+        </div>
+      </ion-list>
+    </form>
+</ion-content>

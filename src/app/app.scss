@@ -1,0 +1,37 @@
+.content, .item, .item.item-input, .item.item-select {
+	background-color: color($colors, light);
+}
+
+.center-content {
+    text-align: center;
+}
+
+.link-text {
+	color: color($colors, blue);
+	text-decoration: none;
+}
+
+.header {
+	background-color: color($colors, brown);
+	max-height: 25vh;
+}
+
+.title-image {
+	width: 100%;
+	max-height: 25vh;
+}
+
+.invalid {
+    color: color($colors, danger);
+    font-size: 70%;
+    padding-left: 3%;
+}
+
+.back-button-container {
+	margin-top: 1%;
+	margin-left: -3%;
+}
+
+.description-text {
+	color: #272626;
+}
