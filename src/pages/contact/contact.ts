@@ -39,7 +39,7 @@ export class ContactPage implements OnInit {
       .subscribe(result => {
         loading.dismiss();
         this.contactForm.reset();
-        this.displayToast("Message is on its way!");
+        this.displayToast("Message is on its way! You will receive an email shortly.");
       }, err => {
         loading.dismiss();
         this.displayToast("Something went wrong. Please try again.");

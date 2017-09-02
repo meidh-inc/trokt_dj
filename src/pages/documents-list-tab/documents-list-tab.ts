@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, ToastController, LoadingController } from 'ionic-angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
@@ -16,7 +16,7 @@ export class DocumentsListTabPage implements OnInit {
   searchText: string = '';
   documents: Document[] = [];
 
-  constructor(private navCtrl: NavController, private loadingCtrl: LoadingController, 
+  constructor(private loadingCtrl: LoadingController, 
               private keyboard: Keyboard, private iab: InAppBrowser, 
               private toastCtrl: ToastController, private documentService: DocumentService) {}
 

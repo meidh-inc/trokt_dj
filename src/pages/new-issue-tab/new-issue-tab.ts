@@ -2,7 +2,6 @@ import { Component,OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { IonicPage, ToastController, LoadingController, ModalController } from 'ionic-angular';
 
-import { BlockDetailsPage } from '../block-details/block-details';
 import { IssueService } from '../../providers/issue.service';
 import { StorageService } from '../../providers/storage.service';
 import Group from '../../models/group';
@@ -64,7 +63,7 @@ export class NewIssueTabPage implements OnInit {
   }
 
   submitIssue() {
-    const loading = this.generateLoadingIndicator('Submitting Issue');
+    const loading = this.generateLoadingIndicator('Submitting Issue...');
     loading.present();
     const userId: number = this.storageService.getUserId() ? parseInt(this.storageService.getUserId()) : null;
     const issue: Issue = new Issue(this.issueForm.value.group_id,
@@ -75,11 +74,11 @@ export class NewIssueTabPage implements OnInit {
     this.issueService.submitIssue(issue)
       .subscribe(result => {
         loading.dismiss();
-        this.showToast('Issue has been submitted');
+        this.showToast('Success! Thank you for raising this issue.');
         this.resetForm();
       }, err => {
         loading.dismiss();
-        this.showToast('Could not submit issue. Please try again');
+        this.showToast('Something went wrong. Please try again');
       });
   }
 

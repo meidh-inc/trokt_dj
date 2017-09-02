@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { NavController, ToastController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, ModalController, ToastController, LoadingController, Loading } from 'ionic-angular';
 
 import { LoginService } from '../../providers/login.service';
 import { StorageService } from '../../providers/storage.service';
@@ -16,9 +16,10 @@ export class LoginPage implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(private navCtrl: NavController, private formBuilder: FormBuilder, 
-              private toastCtrl: ToastController, private loadingCtrl: LoadingController, 
-              private loginService: LoginService, private storageService: StorageService) {}
+  constructor(private navCtrl: NavController, private modalCtrl: ModalController,
+              private formBuilder: FormBuilder, private toastCtrl: ToastController,
+              private loadingCtrl: LoadingController, private loginService: LoginService,
+              private storageService: StorageService) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -47,7 +48,8 @@ export class LoginPage implements OnInit {
   }
 
   navigateToContactPage() {
-    this.navCtrl.push(ContactPage);
+    const contactModal = this.modalCtrl.create(ContactPage);
+    contactModal.present();
   }
 
   showToast(msg: string) {
