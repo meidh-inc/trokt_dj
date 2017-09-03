@@ -44,7 +44,7 @@
 
         <ion-item class="input-item" text-wrap>
           <ion-label floating><span class="larger-input-label">Issue Details</span></ion-label>
-          <ion-textarea formControlName="details"></ion-textarea>
+          <ion-textarea formControlName="details" (ionBlur)="detailsChanged()"></ion-textarea>
         </ion-item>
 
 				<ion-item *ngIf="!issueForm.controls.details.valid && issueForm.controls.details.touched" no-lines>
@@ -52,7 +52,7 @@
 				</ion-item>
 
         <div padding class="center-content">
-          <button type="submit" color="green" ion-button outline [disabled]="!issueForm.valid">Submit</button>
+          <button type="submit" color="green" ion-button outline [disabled]="!formIsValid">Submit</button>
         </div>
       </ion-list>
     </form>

@@ -21,6 +21,7 @@ export class NewIssueTabPage implements OnInit {
   documents: Document[] = [];
   blocks: Block[] = [];
   blockHasText: boolean = false;
+  formIsValid: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private issueService: IssueService,
               private storageService: StorageService, private loadingCtrl: LoadingController,
@@ -35,31 +36,47 @@ export class NewIssueTabPage implements OnInit {
     if (!this.issueForm.value.group_id) {
       return;
     }
+
+    this.issueForm.controls.document_id.disable();
+    this.issueForm.controls.block_id.disable();
+    this.blockHasText = false;
+    this.issueForm.patchValue({ document_id: null, block_id: null });
     this.getDocumentsForUser(this.issueForm.value.group_id);
+    this.isFormValid();
   }
 
   documentChanged() {
     if (!this.issueForm.value.document_id) {
       return;
     }
+
+    this.issueForm.controls.block_id.disable();
+    this.blockHasText = false;
+    this.issueForm.patchValue({ block_id: null });
     this.getDocumentBlocksForUser(this.issueForm.value.document_id);
+    this.isFormValid();
   }
 
   blockChanged() {
     if (!this.issueForm.value.block_id) {
       return;
     }
-    const block = this.blocks.find(block => block.block_id === parseInt(this.issueForm.value.block_id));
-    this.blockHasText = (block.block_text && block.block_text !== '');
+    
+    const block = this.getBlock(this.blocks, this.issueForm.value.block_id);
+    this.blockHasText = (block && block.block_text && block.block_text !== '');
+    this.isFormValid();
+  }
+
+  detailsChanged() {
+    this.isFormValid();
   }
 
   viewBlockDetails() {
     if (!this.issueForm.value.block_id) {
       return;
     }
-    const block = this.blocks.find(block => block.block_id === parseInt(this.issueForm.value.block_id));
-    const detailsModal = this.modalCtrl.create('BlockDetailsPage', { block });
-    detailsModal.present();
+    const block = this.getBlock(this.blocks, this.issueForm.value.block_id);
+    this.modalCtrl.create('BlockDetailsPage', { block }).present();
   }
 
   submitIssue() {
@@ -76,6 +93,7 @@ export class NewIssueTabPage implements OnInit {
         loading.dismiss();
         this.showToast('Success! Thank you for raising this issue.');
         this.resetForm();
+        this.isFormValid();
       }, err => {
         loading.dismiss();
         this.showToast('Something went wrong. Please try again');
@@ -91,9 +109,19 @@ export class NewIssueTabPage implements OnInit {
         loading.dismiss();
         if (!this.isDisabled(this.groups)) {
           this.issueForm.controls.group_id.enable();
+          if (this.groups.length === 1) {
+            const groupId = this.groups[0].group_id;
+            this.issueForm.patchValue({group_id: groupId});
+            this.getDocumentsForUser(groupId);
+          }
         } else {
           this.showToast('You have no groups available.');
+          this.documents = [];
+          this.blocks = [];
+          this.blockHasText = false;
           this.issueForm.controls.group_id.disable();
+          this.issueForm.controls.doc_id.disable();
+          this.issueForm.controls.block_id.disable();
         }
       }, err => {
         loading.dismiss();
@@ -101,7 +129,7 @@ export class NewIssueTabPage implements OnInit {
       });
   }
 
-  private getDocumentsForUser(groupId: string) {
+  private getDocumentsForUser(groupId: number) {
     const loading = this.generateLoadingIndicator('Getting Documents...');
     loading.present();
     this.issueService.getDocumentsForUser(groupId)
@@ -110,9 +138,17 @@ export class NewIssueTabPage implements OnInit {
         loading.dismiss();
         if (!this.isDisabled(this.documents)) {
           this.issueForm.controls.document_id.enable();
+          if (this.documents.length === 1) {
+            const docId = this.documents[0].doc_id;
+            this.issueForm.patchValue({document_id: docId});
+            this.getDocumentBlocksForUser(docId);
+          }
         } else {
           this.showToast('This group has no documents.');
+          this.blocks = [];
+          this.blockHasText = false;
           this.issueForm.controls.document_id.disable();
+          this.issueForm.controls.block_id.disable();
         }
       }, err => {
         loading.dismiss();
@@ -120,7 +156,7 @@ export class NewIssueTabPage implements OnInit {
       });
   }
 
-  private getDocumentBlocksForUser(documentId: string) {
+  private getDocumentBlocksForUser(documentId: number) {
     const loading = this.generateLoadingIndicator('Getting Sections...');
     loading.present();
     this.issueService.getDocumentBlocksForUser(documentId)
@@ -130,6 +166,8 @@ export class NewIssueTabPage implements OnInit {
         if (!this.isDisabled(this.blocks)) {
           this.issueForm.controls.block_id.enable();
         } else {
+          this.issueForm.controls.block_id.disable();
+          this.blockHasText = false;
           this.showToast('This document has no sections.');
         }
       }, err => {
@@ -158,20 +196,21 @@ export class NewIssueTabPage implements OnInit {
     }, 0);
   }
 
-  private isDisabled(list) {
-    return (!list || list.length === 0);
+  private isFormValid() {
+    this.formIsValid = this.issueForm.value.group_id &&
+                       this.issueForm.value.document_id &&
+                       this.issueForm.value.block_id &&
+                       this.issueForm.value.details;
   }
+
+  private getBlock = (blocks, blockId) => blocks.find(block => block.block_id === parseInt(blockId));
+  private isDisabled = (list) => (!list || list.length === 0);
+  private generateLoadingIndicator = (msg: string) => this.loadingCtrl.create({content: msg});
 
   private showToast(msg: string) {
     this.toastCtrl.create({
       message: msg,
       duration: 3000
     }).present();
-  }
-
-  private generateLoadingIndicator(msg: string) {
-    return this.loadingCtrl.create({
-      content: msg
-    });
   }
 }

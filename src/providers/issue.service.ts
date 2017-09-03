@@ -18,13 +18,13 @@ export class IssueService {
       .catch(HttpService.handleError);
   }
 
-  getDocumentsForUser(groupId: string) {
+  getDocumentsForUser(groupId: number) {
     return this.http.get(`${APIConstants.apiUrl}docs?user_id=${this.storageService.getUserId()}&group_id=${groupId}`)
       .map(HttpService.handleResponse)
       .catch(HttpService.handleError);
   }
 
-  getDocumentBlocksForUser(docId: string) {
+  getDocumentBlocksForUser(docId: number) {
     return this.http.get(`${APIConstants.apiUrl}blocks?doc_id=${docId}&user_id=${this.storageService.getUserId()}`)
       .map(HttpService.handleResponse)
       .catch(HttpService.handleError);
